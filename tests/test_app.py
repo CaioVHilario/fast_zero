@@ -9,7 +9,7 @@ def test_root_deve_retornar_ok_e_ola_mundo(client):
 
 
 # Teste do exercicio da aula 2
-def test_exercicio2_deve_retornar_ok_e_html_escrito_ola_mundo(client):
+def test_deve_retornar_ok_e_html_escrito_ola_mundo__exercicio2(client):
     response = client.get('/exercicio2/')
 
     assert response.status_code == HTTPStatus.OK
@@ -65,8 +65,46 @@ def test_update_user(client):
     }
 
 
+def test_update_user_should_return_not_found__exercicio3(client):
+    response = client.put(
+        '/users/0',
+        json={
+            'username': 'bob',
+            'email': 'bob@example.com',
+            'password': 'mynewpassword',
+        },
+    )
+    assert response.status_code == HTTPStatus.NOT_FOUND
+    assert response.json() == {'detail': 'User not found'}
+
+
+def test_read_one_user(client):
+    response = client.get('/users/1')
+
+    assert response.status_code == HTTPStatus.OK
+    assert response.json() == {
+        'username': 'bob',
+        'email': 'bob@example.com',
+        'id': 1,
+    }
+
+
+def test_read_one_user_should_return_not_dound__exercicio3(client):
+    response = client.get('/users/900')
+
+    assert response.status_code == HTTPStatus.NOT_FOUND
+    assert response.json() == {'detail': 'User not found'}
+
+
 def test_delete_user(client):
     response = client.delete('/users/1')
 
     assert response.status_code == HTTPStatus.OK
     assert response.json() == {'message': 'User deleted'}
+
+
+def test_delete_should_return_not_found__exercicio3(client):
+    response = client.delete('/users/999')
+
+    assert response.status_code == HTTPStatus.NOT_FOUND
+    assert response.json() == {'detail': 'User not found'}
