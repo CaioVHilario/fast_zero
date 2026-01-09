@@ -5,7 +5,7 @@ from fastapi.responses import HTMLResponse
 
 from .schemas import Message, UserDB, UserList, UserPublic, UserSchema
 
-app = FastAPI()
+app = FastAPI(title='Minha API de estudos do curso de FastAPI.')
 
 database = []
 

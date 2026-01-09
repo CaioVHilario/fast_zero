@@ -10,8 +10,17 @@ Este projeto é uma API de gerenciamento de tarefas (Todo List) desenvolvida dur
 - [x] Aula 01: Configuração do ambiente.
 - [x] Aula 02: Introdução ao desenvolvimento WEB.
 - [x] Aula 03: Estruturando o projeto e criando rotas CRUD.
-- [ ] Aula 04: Configurando o banco de dados (Alembic).
-- [ ] ... (em progresso)
+- [x] Aula 04: Configurando o banco de dados (Alembic).
+- [ ] Aula 05: Integrando o banco de dados à API
+- [ ] Aula 06: Autenticação e Autorização com JWT
+- [ ] Aula 07: Refatorando a estrutura do projeto
+- [ ] Aula 08: Tornando o projeto assíncrono
+- [ ] Aula 09: Tornando o sistema de autenticação robusto
+- [ ] Aula 10: Criando rotas CRUD para gerenciamento de tarefas
+- [ ] Aula 11: Dockerizando a nossa aplicação e introduzindo o PostgreSQL
+- [ ] Aula 12: Automatizando os testes com integração contínua
+- [ ] Aula 13: Fazendo o deploy no Fly.io
+- [ ] Aula 14: Despedida e próximos passos
 
 ---
 
