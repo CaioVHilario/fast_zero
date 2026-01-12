@@ -11,7 +11,7 @@ Este projeto é uma API de gerenciamento de tarefas (Todo List) desenvolvida dur
 - [x] Aula 02: Introdução ao desenvolvimento WEB.
 - [x] Aula 03: Estruturando o projeto e criando rotas CRUD.
 - [x] Aula 04: Configurando o banco de dados (Alembic).
-- [ ] Aula 05: Integrando o banco de dados à API
+- [x] Aula 05: Integrando o banco de dados à API
 - [ ] Aula 06: Autenticação e Autorização com JWT
 - [ ] Aula 07: Refatorando a estrutura do projeto
 - [ ] Aula 08: Tornando o projeto assíncrono
