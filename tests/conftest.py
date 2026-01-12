@@ -43,6 +43,9 @@ def _mock_db_time(*, model, time=datetime(2026, 1, 10)):
         # condição para ver se target (User) tem 'created_at'
         if hasattr(target, 'created_at'):
             target.created_at = time
+        # condição para ver se target (User) tem 'updated_at'
+        if hasattr(target, 'updated_at'):
+            target.updated_at = time
 
     # quando o evento acontecer escuta antes e chama fake_time_hook
     event.listen(model, 'before_insert', fake_time_hook)
