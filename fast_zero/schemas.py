@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, ConfigDict, EmailStr
 
 
 class Message(BaseModel):
@@ -16,9 +16,9 @@ class UserPublic(BaseModel):
     username: str
     email: EmailStr
 
-
-class UserDB(UserSchema):
-    id: int
+    # configuração para avisar ao pydantic para pegar apenas os atributos
+    # para converter do SQAlchemy para pydantic
+    model_config = ConfigDict(from_attributes=True)
 
 
 class UserList(BaseModel):

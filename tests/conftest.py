@@ -5,24 +5,43 @@ import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine, event
 from sqlalchemy.orm import Session
+from sqlalchemy.pool import StaticPool
 
 from fast_zero.app import app
-from fast_zero.models import table_registry
+from fast_zero.database import get_session
+from fast_zero.models import User, table_registry
 
 
 # fixture para fazer o arrange dos testes abrindo o cliente de teste
 @pytest.fixture
-def client():
-    return TestClient(app)
+def client(session):
+    def get_session_override():
+        # Função para chamar a fixture session que usa a banco de dados em
+        # memória, para testes unitários.
+        return session
+
+    with TestClient(app) as client:
+        # Sobreescreve a get_session quando o endpoint POST for chamado
+        #  e retorna a fixture session para não "sujar" o banco de dados
+        # de produção, usando apenas a memoria
+        app.dependency_overrides[get_session] = get_session_override
+        yield client
+
+    # Limpa o que foi sobreescrito
+    app.dependency_overrides.clear()
 
 
 # fixture para configurar e limpar o banco de dados para cada teste, isolando
-# os testes para que um teste não interfia no outro
+# os testes para que um teste não interfira no outro
 @pytest.fixture
 def session():
     # cria o banco de dados em memoria apenas para testes unitários
-    engine = create_engine('sqlite:///:memory:')
-    # cria todos os metadados das tabelas já registradas e cria eles
+    engine = create_engine(
+        'sqlite:///:memory:',
+        connect_args={'check_same_thread': False},
+        poolclass=StaticPool,
+    )
+    # pega todos os metadados das tabelas já registradas e cria eles
     table_registry.metadata.create_all(engine)
 
     # abre a sessão do db e código para interagir com o banco
@@ -38,7 +57,7 @@ def session():
 @contextmanager
 def _mock_db_time(*, model, time=datetime(2026, 1, 10)):
 
-    # função para alterar o método created_at do objeto target
+    # função para alterar o método created_at, updated_at do objeto target
     def fake_time_hook(mapper, connection, target):
         # condição para ver se target (User) tem 'created_at'
         if hasattr(target, 'created_at'):
@@ -60,3 +79,14 @@ def _mock_db_time(*, model, time=datetime(2026, 1, 10)):
 @pytest.fixture
 def mock_db_time():
     return _mock_db_time
+
+
+@pytest.fixture
+def user(session: Session):
+    user = User(username='Teste', password='testtest', email='teste@test.com')
+
+    session.add(user)
+    session.commit()
+    session.refresh(user)
+
+    return user

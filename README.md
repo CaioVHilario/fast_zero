@@ -51,38 +51,53 @@ O projeto utiliza o que há de mais moderno no ecossistema Python (versões 2025
 git clone https://github.com/CaioVHilario/fast_zero.git
 cd fast_zero
 ```
-### 2. Configure o ambiente Python
-Recomenda-se o uso de ambiente virtual (venv).
+### 2. Instalar o Poetry (se ainda não tiver)
 
 ```bash
+pipx install poetry==2.2
+pipx inject poetry poetry-plugin-shell
+``` 
 
-
-
-python -m venv .venv
-source .venv/bin/activate  # No Linux/Mac
-# ou
-.venv\Scripts\activate     # No Windows
-```
-
-### 3. Instale as dependências
-```Bash
-pip install -r requirements.txt
-```
-### 4. Execute o servidor
+Verificar instalação
 
 ```bash
-fastapi dev fast_zero/app.py
+poetry --version
 ```
 
-Acesse a documentação interativa em: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+### 3. Configurar ambiente virtual e instalar dependências
+
+```bash
+# Configurar o Poetry para usar a versão correta do Python
+poetry env use python3.12
+
+# Instalar todas as dependências
+poetry install
+
+# Ativar as variaveis de ambiente
+poetry shell
+```
+
+### Executando a aplicação
+
+```bash
+task run
+```
+#### Acesse a documentação interativa em: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 
 ![alt text](assets/Docs_fast_zero.png)
 
 ## 🧪 Rodando Testes
-Para garantir que tudo está funcionando corretamente:
 
-```Bash
-pytest -v
+```bash
+# Executar todos os testes
+task test
+
+# Formatação de código
+task format
+
+# Verificar cobertura de testes
+task test
+# Os relatórios de cobertura estarão em: htmlcov/
 ```
 
 ### 📚 Créditos e Referências
