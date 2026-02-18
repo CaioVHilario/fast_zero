@@ -61,26 +61,22 @@ def test_creat_user_conflict_email(client, user):
     assert response.json() == {'detail': 'Email already exists'}
 
 
-def test_read_users(client):
-    response = client.get('/users/')
-
-    assert response.status_code == HTTPStatus.OK
-    assert response.json() == {'users': []}
-
-
-def test_read_users_with_users(client, user):
+def test_read_users_with_users(client, user, token):
     # Converte o modelo do ORM para um schema Pydantic e depois para
     # um dicionário para permitir a comparação com o JSON da resposta.
     user_schema = UserPublic.model_validate(user).model_dump()
+    response = client.get(
+        '/users/', headers={'Authorization': f'Bearer {token}'}
+    )
 
-    response = client.get('/users/')
     assert response.status_code == HTTPStatus.OK
     assert response.json() == {'users': [user_schema]}
 
 
-def test_update_user(client, user):
+def test_update_user(client, user, token):
     response = client.put(
-        '/users/1',
+        f'/users/{user.id}',
+        headers={'Authorization': f'Bearer {token}'},
         json={
             'username': 'bob',
             'email': 'bob@example.com',
@@ -91,11 +87,11 @@ def test_update_user(client, user):
     assert response.json() == {
         'username': 'bob',
         'email': 'bob@example.com',
-        'id': 1,
+        'id': user.id,
     }
 
 
-def test_update_integrity_error(client, user):
+def test_update_integrity_error(client, user, token):
     client.post(
         '/users/',
         json={
@@ -106,7 +102,8 @@ def test_update_integrity_error(client, user):
     )
 
     response = client.put(
-        '/users/1',
+        f'/users/{user.id}',
+        headers={'Authorization': f'Bearer {token}'},
         json={
             'username': 'bob',
             'email': user.email,
@@ -118,28 +115,17 @@ def test_update_integrity_error(client, user):
     assert response.json() == {'detail': 'Usernama or Email already exists'}
 
 
-def test_update_user_should_return_not_found__exercicio3(client, user):
-    response = client.put(
-        '/users/0',
-        json={
-            'username': 'bob',
-            'email': 'bob@example.com',
-            'password': 'mynewpassword',
-        },
+def test_delete_user(client, user, token):
+    response = client.delete(
+        f'/users/{user.id}', headers={'Authorization': f'Bearer {token}'}
     )
-    assert response.status_code == HTTPStatus.NOT_FOUND
-    assert response.json() == {'detail': 'User not found'}
-
-
-def test_delete_user(client, user):
-    response = client.delete('/users/1')
 
     assert response.status_code == HTTPStatus.OK
     assert response.json() == {'message': 'User deleted'}
 
 
 def test_read_one_user(client, user):
-    response = client.get('/users/1')
+    response = client.get(f'/users/{user.id}')
 
     assert response.status_code == HTTPStatus.OK
     assert response.json() == {
@@ -156,8 +142,14 @@ def test_read_one_user_should_return_not_found__exercicio3(client, user):
     assert response.json() == {'detail': 'User not found'}
 
 
-def test_delete_should_return_not_found__exercicio3(client, user):
-    response = client.delete('/users/999')
+def test_get_token(client, user):
+    response = client.post(
+        '/token',
+        data={'username': user.email, 'password': user.clean_password},
+    )
 
-    assert response.status_code == HTTPStatus.NOT_FOUND
-    assert response.json() == {'detail': 'User not found'}
+    token = response.json()
+
+    assert response.status_code == HTTPStatus.OK
+    assert 'access_token' in token
+    assert 'token_type' in token
