@@ -13,7 +13,7 @@ Este projeto é uma API de gerenciamento de tarefas (Todo List) desenvolvida dur
 - [x] Aula 04: Configurando o banco de dados (Alembic).
 - [x] Aula 05: Integrando o banco de dados à API
 - [x] Aula 06: Autenticação e Autorização com JWT
-- [ ] Aula 07: Refatorando a estrutura do projeto
+- [x] Aula 07: Refatorando a estrutura do projeto
 - [ ] Aula 08: Tornando o projeto assíncrono
 - [ ] Aula 09: Tornando o sistema de autenticação robusto
 - [ ] Aula 10: Criando rotas CRUD para gerenciamento de tarefas
