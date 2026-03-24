@@ -2,9 +2,10 @@ from contextlib import contextmanager
 from datetime import datetime
 
 import pytest
+import pytest_asyncio
 from fastapi.testclient import TestClient
-from sqlalchemy import create_engine, event
-from sqlalchemy.orm import Session
+from sqlalchemy import event
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.pool import StaticPool
 
 from fast_zero.app import app
@@ -34,25 +35,25 @@ def client(session):
 
 # fixture para configurar e limpar o banco de dados para cada teste, isolando
 # os testes para que um teste não interfira no outro
-@pytest.fixture
-def session():
+@pytest_asyncio.fixture
+async def session():
     # cria o banco de dados em memoria apenas para testes unitários
-    engine = create_engine(
-        'sqlite:///:memory:',
+    engine = create_async_engine(
+        'sqlite+aiosqlite:///:memory:',
         connect_args={'check_same_thread': False},
         poolclass=StaticPool,
     )
     # pega todos os metadados das tabelas já registradas e cria eles
-    table_registry.metadata.create_all(engine)
+    async with engine.begin() as conn:
+        await conn.run_sync(table_registry.metadata.create_all)
 
     # abre a sessão do db e código para interagir com o banco
-    with Session(engine) as session:
+    async with AsyncSession(engine, expire_on_commit=False) as session:
         yield session
 
     # limpa o banco em memoria para os proximos testes
-    table_registry.metadata.drop_all(engine)
-    # fecha todas as sessões abertas associadas a engine
-    engine.dispose()
+    async with engine.begin() as conn:
+        await conn.run_sync(table_registry.metadata.drop_all)
 
 
 @contextmanager
@@ -82,8 +83,8 @@ def mock_db_time():
     return _mock_db_time
 
 
-@pytest.fixture
-def user(session: Session):
+@pytest_asyncio.fixture
+async def user(session: AsyncSession):
     password = 'testtest'
     user = User(
         username='Teste',
@@ -94,8 +95,8 @@ def user(session: Session):
     user.clean_password = password
 
     session.add(user)
-    session.commit()
-    session.refresh(user)
+    await session.commit()
+    await session.refresh(user)
 
     return user
 
