@@ -78,7 +78,7 @@ async def update_user(
     session: Session,
     current_user: CurrentUser,
 ):
-    if not current_user:
+    if current_user.id != user_id:
         raise HTTPException(
             status_code=HTTPStatus.FORBIDDEN, detail='Not enough permissions'
         )
@@ -107,7 +107,7 @@ async def delete_user(
     session: Session,
     current_user: CurrentUser,
 ):
-    if not current_user:
+    if current_user.id != user_id:
         raise HTTPException(
             status_code=HTTPStatus.FORBIDDEN, detail='Not enough permissions'
         )
