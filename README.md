@@ -16,8 +16,8 @@ Este projeto é uma API de gerenciamento de tarefas (Todo List) desenvolvida dur
 - [x] Aula 06: Autenticação e Autorização com JWT
 - [x] Aula 07: Refatorando a estrutura do projeto
 - [x] Aula 08: Tornando o projeto assíncrono
-- [ ] Aula 09: Tornando o sistema de autenticação robusto
-- [ ] Aula 10: Criando rotas CRUD para gerenciamento de tarefas
+- [x] Aula 09: Tornando o sistema de autenticação robusto
+- [x] Aula 10: Criando rotas CRUD para gerenciamento de tarefas
 - [ ] Aula 11: Dockerizando a nossa aplicação e introduzindo o PostgreSQL
 - [ ] Aula 12: Automatizando os testes com integração contínua
 - [ ] Aula 13: Fazendo o deploy no Fly.io
