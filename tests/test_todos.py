@@ -3,8 +3,9 @@ from http import HTTPStatus
 import factory
 import factory.fuzzy
 import pytest
+from sqlalchemy import select
 
-from fast_zero.models import Todo, TodoState
+from fast_zero.models import Todo, TodoState, User
 
 
 class TodoFactory(factory.Factory):
@@ -17,22 +18,25 @@ class TodoFactory(factory.Factory):
     user_id = 1
 
 
-def test_create_todo(client, token):
-    response = client.post(
-        '/todos/',
-        headers={'Authorization': f'Bearer {token}'},
-        json={
-            'title': 'Test todo',
-            'description': 'Test todo description',
-            'state': 'draft',
-        },
-    )
+def test_create_todo(client, token, mock_db_time):
+    with mock_db_time(model=Todo) as time:
+        response = client.post(
+            '/todos/',
+            headers={'Authorization': f'Bearer {token}'},
+            json={
+                'title': 'Test todo',
+                'description': 'Test todo description',
+                'state': 'draft',
+            },
+        )
 
     assert response.json() == {
         'id': 1,
         'title': 'Test todo',
         'description': 'Test todo description',
         'state': 'draft',
+        'created_at': time.isoformat(),
+        'updated_at': time.isoformat(),
     }
 
 
@@ -152,6 +156,34 @@ async def test_list_todos_filter_combined_should_return_5_todos(
     assert len(response.json()['todos']) == expected_todos
 
 
+@pytest.mark.asyncio
+async def test_list_todos_should_return_all_expected_fields__exercise(
+    session, user, token, mock_db_time, client
+):
+    with mock_db_time(model=Todo) as time:
+        todo = TodoFactory.create(user_id=user.id)
+        session.add(todo)
+        await session.commit()
+
+    await session.refresh(todo)
+
+    response = client.get(
+        '/todos/',
+        headers={'Authorization': f'Bearer {token}'},
+    )
+
+    assert response.json()['todos'] == [
+        {
+            'created_at': time.isoformat(),
+            'updated_at': time.isoformat(),
+            'id': todo.id,
+            'title': todo.title,
+            'description': todo.description,
+            'state': todo.state,
+        }
+    ]
+
+
 def test_delete_todo_error(client, token):
     response = client.delete(
         '/todos/10', headers={'Authorization': f'Bearer {token}'}
@@ -215,3 +247,40 @@ async def test_update_todo(client, user, token, session):
 
     assert response.status_code == HTTPStatus.OK
     assert response.json()['title'] == 'teste!'
+
+
+@pytest.mark.asyncio
+async def test_create_todo_with_wrong_state__exercise(session, user: User):
+
+    todo = Todo(
+        title='Test title',
+        description='test description',
+        state='feito',
+        user_id=user.id,
+    )
+
+    session.add(todo)
+    await session.commit()
+
+    with pytest.raises(LookupError):
+        await session.scalar(select(Todo))
+
+
+def test_list_todos_filter_min_lenght_exercise(client, token):
+    tiny_string = 'a'
+    response = client.get(
+        f'/todos/?title={tiny_string}',
+        headers={'Authorization': f'Bearer {token}'},
+    )
+
+    assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
+
+
+def test_list_todos_filter_max_lenght_exercise(client, token):
+    large_string = 'a' * 22
+    response = client.get(
+        f'/todos/?title={large_string}',
+        headers={'Authorization': f'Bearer {token}'},
+    )
+
+    assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
