@@ -3,7 +3,7 @@ from http import HTTPStatus
 import factory
 import factory.fuzzy
 import pytest
-from sqlalchemy import select
+from sqlalchemy.exc import DataError
 
 from fast_zero.models import Todo, TodoState, User
 
@@ -260,10 +260,9 @@ async def test_create_todo_with_wrong_state__exercise(session, user: User):
     )
 
     session.add(todo)
-    await session.commit()
 
-    with pytest.raises(LookupError):
-        await session.scalar(select(Todo))
+    with pytest.raises(DataError):
+        await session.commit()
 
 
 def test_list_todos_filter_min_lenght_exercise(client, token):

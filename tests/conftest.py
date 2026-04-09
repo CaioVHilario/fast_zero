@@ -7,7 +7,7 @@ import pytest_asyncio
 from fastapi.testclient import TestClient
 from sqlalchemy import event
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.pool import StaticPool
+from testcontainers.postgres import PostgresContainer
 
 from fast_zero.app import app
 from fast_zero.database import get_session
@@ -43,16 +43,16 @@ def client(session):
     app.dependency_overrides.clear()
 
 
+@pytest.fixture(scope='session')
+def engine():
+    with PostgresContainer('postgres:17', driver='psycopg') as postgres:
+        yield create_async_engine(postgres.get_connection_url())
+
+
 # fixture para configurar e limpar o banco de dados para cada teste, isolando
 # os testes para que um teste não interfira no outro
 @pytest_asyncio.fixture
-async def session():
-    # cria o banco de dados em memoria apenas para testes unitários
-    engine = create_async_engine(
-        'sqlite+aiosqlite:///:memory:',
-        connect_args={'check_same_thread': False},
-        poolclass=StaticPool,
-    )
+async def session(engine):
     # pega todos os metadados das tabelas já registradas e cria eles
     async with engine.begin() as conn:
         await conn.run_sync(table_registry.metadata.create_all)
