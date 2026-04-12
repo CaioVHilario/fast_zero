@@ -18,8 +18,8 @@ Este projeto é uma API de gerenciamento de tarefas (Todo List) desenvolvida dur
 - [x] Aula 08: Tornando o projeto assíncrono
 - [x] Aula 09: Tornando o sistema de autenticação robusto
 - [x] Aula 10: Criando rotas CRUD para gerenciamento de tarefas
-- [ ] Aula 11: Dockerizando a nossa aplicação e introduzindo o PostgreSQL
-- [ ] Aula 12: Automatizando os testes com integração contínua
+- [x] Aula 11: Dockerizando a nossa aplicação e introduzindo o PostgreSQL
+- [x] Aula 12: Automatizando os testes com integração contínua
 - [ ] Aula 13: Fazendo o deploy no Fly.io
 
 ---
@@ -36,14 +36,6 @@ O projeto utiliza o que há de mais moderno no ecossistema Python (versões 2025
 - **Pytest**: Testes automatizados.
 - **Docker**: Conteinerização.
 
-## 🛠️ Funcionalidades (Previstas e Implementadas)
-
-- **CRUD de Usuários**: Cadastro, atualização e exclusão (Implementando).
-- **Autenticação JWT**: Sistema de login seguro.
-- **Gerenciador de Tarefas**: CRUD completo de tarefas vinculadas.
-- **Assincronismo**: Operações escaláveis com `async/await`.
-- **CI/CD**: Integração contínua via GitHub Actions.
-
 ## 🔧 Como Executar (Ambiente de Desenvolvimento)
 
 ### 1. Clone o repositório
@@ -53,36 +45,22 @@ git clone https://github.com/CaioVHilario/fast_zero.git
 cd fast_zero
 ```
 
-### 2. Instalar o Poetry (se ainda não tiver)
+### 2. Execute o docker
+
+Para iniciar a aplicação e o banco de dados:
 
 ```bash
-pipx install poetry==2.2
-pipx inject poetry poetry-plugin-shell
+docker-compose up --build
 ```
 
-Verificar instalação
+ou adicione a flag `-d` ao final para rodar em segundo plano, liberando o terminal.
+
+### 3. Parando a aplicação
+
+Execute:
 
 ```bash
-poetry --version
-```
-
-### 3. Configurar ambiente virtual e instalar dependências
-
-```bash
-# Configurar o Poetry para usar a versão correta do Python
-poetry env use python3.12
-
-# Instalar todas as dependências
-poetry install
-
-# Ativar as variaveis de ambiente
-poetry shell
-```
-
-### Executando a aplicação
-
-```bash
-task run
+docker-compose down
 ```
 
 #### Acesse a documentação interativa em: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
@@ -92,9 +70,6 @@ task run
 ## 🧪 Rodando Testes
 
 ```bash
-# Executar todos os testes
-task test
-
 # Formatação de código
 task format
 
