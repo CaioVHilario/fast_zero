@@ -20,7 +20,11 @@ app.include_router(todos.router)
 
 @app.get('/', status_code=HTTPStatus.OK, response_model=Message)
 async def read_root():
-    return {'message': 'Olá Mundo!'}
+    return {
+        'message': 'API de estudos do curso de FastAPI para gerenciamento de tarefas',
+        'documentação interativa': 'https://todolist-fastzero.fly.dev/docs',
+        'documentação': 'https://todolist-fastzero.fly.dev/redoc'
+    }
 
 
 # Exercício da aula 2, fazer um endpoint que retorne um Olá mundo em HTML e
@@ -32,7 +36,7 @@ async def html_olamundo():
     return """
     <html>
         <head>
-            <title> Olá mundo!</title>
+            <title>API de estudos do curso de FastAPI</title>
         </head>
         <body>
             <h1> Olá mundo! </h1>

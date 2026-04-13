@@ -28,6 +28,3 @@ jobs:
 
             - name: Executar testes
               run: poetry run task test
-            
-            - name: Upload coverage
-              uses: codecov/codecov-action@v3

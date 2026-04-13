@@ -1,87 +1,148 @@
-# 📝 Fast Zero - Gerenciador de Tarefas
+# Fast Zero
 
-Este projeto é uma API de gerenciamento de tarefas (Todo List) desenvolvida durante o curso **FastAPI do Zero**, ministrado por [Eduardo Mendes (Dunossauro)](https://github.com/dunossauro). O projeto foca em construir uma aplicação robusta, seguindo as melhores práticas do mercado, testes automatizados e deploy.
+> API REST para gerenciamento de tarefas — baseada no curso [FastAPI do Zero](https://fastapidozero.dunossauro.com/) da Live de Python, ministrado por Eduardo Mendes.
 
----
-
-## 🚧 Progresso do Projeto
-
-**Status:** Em desenvolvimento (Aula 3 de 14) 🚀
-
-- [x] Aula 01: Configuração do ambiente.
-- [x] Aula 02: Introdução ao desenvolvimento WEB.
-- [x] Aula 03: Estruturando o projeto e criando rotas CRUD.
-- [x] Aula 04: Configurando o banco de dados (Alembic).
-- [x] Aula 05: Integrando o banco de dados à API
-- [x] Aula 06: Autenticação e Autorização com JWT
-- [x] Aula 07: Refatorando a estrutura do projeto
-- [x] Aula 08: Tornando o projeto assíncrono
-- [x] Aula 09: Tornando o sistema de autenticação robusto
-- [x] Aula 10: Criando rotas CRUD para gerenciamento de tarefas
-- [x] Aula 11: Dockerizando a nossa aplicação e introduzindo o PostgreSQL
-- [x] Aula 12: Automatizando os testes com integração contínua
-- [ ] Aula 13: Fazendo o deploy no Fly.io
+![Status](https://img.shields.io/badge/status-finalizado-brightgreen)
+![Python](https://img.shields.io/badge/python-3.13-blue)
+![License](https://img.shields.io/badge/license-CC%20BY--NC--SA-lightgrey)
 
 ---
 
-## 🚀 Tecnologias Utilizadas
+## Sobre o Projeto
 
-O projeto utiliza o que há de mais moderno no ecossistema Python (versões 2025):
+Este projeto é uma API de gerenciamento de tarefas (TODO List) desenvolvida ao longo do curso **FastAPI do Zero**. O foco é construir uma API robusta seguindo as melhores práticas do mercado, com autenticação JWT, banco de dados relacional, testes automatizados e deploy em produção.
 
-- **Python 3.12+**
-- **FastAPI** (v0.115+): Framework moderno de alta performance.
-- **Pydantic** (v2.0+): Validação de dados e schemas.
-- **SQLAlchemy** (v2.0+): ORM para persistência de dados.
-- **Alembic**: Gerenciamento de migrações.
-- **Pytest**: Testes automatizados.
-- **Docker**: Conteinerização.
+**API em produção:** `https://seu-app.fly.dev` *(atualize com a URL do seu deploy no Fly.io)*
 
-## 🔧 Como Executar (Ambiente de Desenvolvimento)
+---
 
-### 1. Clone o repositório
+## O que você vai aprender
+
+- Estruturar uma API REST profissional com FastAPI
+- Integrar banco de dados relacional com SQLAlchemy e Alembic
+- Implementar autenticação e autorização com JWT
+- Escrever testes automatizados com Pytest
+- Dockerizar a aplicação e trabalhar com PostgreSQL
+- Configurar CI/CD com GitHub Actions
+- Fazer deploy no Fly.io
+
+**Nível:** Iniciante → Intermediário
+
+---
+
+## Aulas do Curso
+
+| Aula | Conteúdo |
+|------|----------|
+| 01 | Configuração do ambiente |
+| 02 | Introdução ao desenvolvimento WEB |
+| 03 | Estruturando o projeto e criando rotas CRUD |
+| 04 | Configurando o banco de dados com Alembic |
+| 05 | Integrando o banco de dados à API |
+| 06 | Autenticação e Autorização com JWT |
+| 07 | Refatorando a estrutura do projeto |
+| 08 | Tornando o projeto assíncrono |
+| 09 | Tornando o sistema de autenticação robusto |
+| 10 | Criando rotas CRUD para gerenciamento de tarefas |
+| 11 | Dockerizando a aplicação e introduzindo o PostgreSQL |
+| 12 | Automatizando os testes com integração contínua |
+| 13 | Fazendo o deploy no Fly.io |
+
+---
+
+## Tech Stack
+
+| Tecnologia | Versão | Descrição |
+|---|---|---|
+| Python | 3.13 | Linguagem principal |
+| FastAPI | 0.115+ | Framework web de alta performance |
+| Pydantic | 2.0+ | Validação de dados e schemas |
+| SQLAlchemy | 2.0+ | ORM para persistência de dados |
+| Alembic | latest | Gerenciamento de migrações |
+| PostgreSQL | 15+ | Banco de dados relacional |
+| Pytest | latest | Testes automatizados |
+| Docker | 24+ | Conteinerização |
+| GitHub Actions | — | CI/CD |
+
+---
+
+## Pré-requisitos
+
+Antes de começar, certifique-se de ter instalado:
+
+```
+Python >= 3.12
+Docker >= 24
+```
+
+---
+
+## Como instalar e rodar
+
+**1. Clone o repositório**
 
 ```bash
 git clone https://github.com/CaioVHilario/fast_zero.git
 cd fast_zero
 ```
 
-### 2. Execute o docker
+**2. Configure as variáveis de ambiente**
 
-Para iniciar a aplicação e o banco de dados:
+```bash
+cp .env.example .env
+```
+
+**3. Suba a aplicação com Docker**
 
 ```bash
 docker-compose up --build
 ```
 
-ou adicione a flag `-d` ao final para rodar em segundo plano, liberando o terminal.
+**4. Acesse a documentação interativa (swagger)**
 
-### 3. Parando a aplicação
+```
+http://127.0.0.1:8000/docs
+```
 
-Execute:
+**5. Acesse a documentação**
+
+```
+http://127.0.0.1:8000/redoc
+```
+
+**Parar a aplicação:**
 
 ```bash
 docker-compose down
 ```
 
-#### Acesse a documentação interativa em: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+---
 
-![alt text](assets/Docs_fast_zero.png)
-
-## 🧪 Rodando Testes
+## Testes e qualidade de código
 
 ```bash
-# Formatação de código
+# Formatar o código
 task format
 
-# Verificar cobertura de testes
+# Rodar os testes com cobertura
 task test
-# Os relatórios de cobertura estarão em: htmlcov/
 ```
 
-### 📚 Créditos e Referências
+Os relatórios de cobertura estarão disponíveis em: `htmlcov/index.html`
 
-Este projeto é baseado no curso gratuito de FastAPI do Zero da [Live de Python](https://github.com/dunossauro/fastapi-do-zero).
+---
 
-Licença do Material: Creative Commons BY-NC-SA.
+## Links úteis
 
-Desenvolvido por Caio Vieira Hilário
+- [Curso FastAPI do Zero](https://fastapidozero.dunossauro.com/)
+- [Canal Live de Python](https://www.youtube.com/@Dunossauro)
+- [Documentação oficial do FastAPI](https://fastapi.tiangolo.com/)
+- [Documentação do SQLAlchemy](https://docs.sqlalchemy.org/)
+
+---
+
+## Créditos
+
+Projeto desenvolvido como parte do curso [FastAPI do Zero](https://fastapidozero.dunossauro.com/), ministrado por **Eduardo Mendes** na [Live de Python](https://www.youtube.com/@Dunossauro).
+
+O material do curso está licenciado sob [Creative Commons BY-NC-SA](https://creativecommons.org/licenses/by-nc-sa/4.0/).
