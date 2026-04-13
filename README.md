@@ -12,7 +12,7 @@
 
 Este projeto é uma API de gerenciamento de tarefas (TODO List) desenvolvida ao longo do curso **FastAPI do Zero**. O foco é construir uma API robusta seguindo as melhores práticas do mercado, com autenticação JWT, banco de dados relacional, testes automatizados e deploy em produção.
 
-**API em produção:** `https://seu-app.fly.dev` *(atualize com a URL do seu deploy no Fly.io)*
+**API em produção:** `https://todolist-fastzero.fly.dev/`
 
 ---
 

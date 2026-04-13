@@ -21,9 +21,8 @@ app.include_router(todos.router)
 @app.get('/', status_code=HTTPStatus.OK, response_model=Message)
 async def read_root():
     return {
-        'message': 'API de estudos do curso de FastAPI para gerenciamento de tarefas',
-        'documentação interativa': 'https://todolist-fastzero.fly.dev/docs',
-        'documentação': 'https://todolist-fastzero.fly.dev/redoc'
+        'message': 'API de estudos do curso de FastAPI para gerenciamento de /'
+        'tarefas',
     }
 
 

@@ -1,11 +1,14 @@
 from http import HTTPStatus
 
 
-def test_root_deve_retornar_ok_e_ola_mundo(client):
+def test_root_deve_retornar_links_documentation(client):
     response = client.get('/')
 
     assert response.status_code == HTTPStatus.OK
-    assert response.json() == {'message': 'Olá Mundo!'}
+    assert response.json() == {
+        'message': 'API de estudos do curso de FastAPI para gerenciamento de /'
+        'tarefas',
+    }
 
 
 # Teste do exercicio da aula 2
