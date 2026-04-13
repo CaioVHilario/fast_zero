@@ -14,6 +14,8 @@ Este projeto é uma API de gerenciamento de tarefas (TODO List) desenvolvida ao 
 
 **API em produção:** `https://todolist-fastzero.fly.dev/`
 
+![API](assets/Docs_fast_zero.png)
+
 ---
 
 ## O que você vai aprender
